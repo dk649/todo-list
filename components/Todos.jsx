@@ -1,16 +1,8 @@
 import React from "react";
-import prisma from "@/utils/db";
+
 import Link from "next/link";
 import DeleteForm from "./DeleteForm";
-
-const getAllTasks = async () => {
-  const allTasks = await prisma.task.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return allTasks;
-};
+import { getAllTasks } from "@/utils/actions";
 
 const Todos = async () => {
   const tasks = await getAllTasks();

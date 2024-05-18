@@ -1,9 +1,13 @@
 import React from "react";
-import prisma from "@/utils/db";
+import { deleteTask } from "@/utils/actions";
 
 const DeleteForm = ({ id }) => {
-  console.log(id);
-  return <div>Delete</div>;
+  return (
+    <form action={deleteTask}>
+      <input type="hidden" name="id" value={id} />
+      <button className="btn btn-error btn-xs">delete</button>
+    </form>
+  );
 };
 
 export default DeleteForm;

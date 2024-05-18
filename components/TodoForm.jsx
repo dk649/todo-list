@@ -1,23 +1,39 @@
-import prisma from "@/utils/db";
-import { revalidatePath } from "next/cache";
-import React from "react";
+"use client";
+import { createTask } from "@/utils/actions";
+import { useFormStatus, useFormState } from "react-dom";
+import toast, { Toaster } from "react-hot-toast";
+
+import React, { useEffect } from "react";
+
+const initialState = {
+  message: null,
+};
+
+const SubmitBtn = () => {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      className="btn btn-accent join-item"
+      disabled={pending}
+    >
+      {pending ? "creating..." : "Add todo"}
+    </button>
+  );
+};
 
 const TodoForm = () => {
-  const createTask = async (formData) => {
-    "use server";
+  const [state, formAction] = useFormState(createTask, initialState);
 
-    const content = formData.get("content");
-
-    await prisma.task.create({
-      data: {
-        content,
-      },
-    });
-
-    revalidatePath("/");
-  };
+  useEffect(() => {
+    if (state.status === 400) {
+      toast.error(state.message);
+    } else if (state.message) {
+      toast.success("Task created successfully");
+    }
+  }, [state]);
   return (
-    <form action={createTask}>
+    <form action={formAction}>
       <div className="join w-full mb-8">
         <input
           type="text"
@@ -26,9 +42,7 @@ const TodoForm = () => {
           name="content"
           required
         />
-        <button type="submit" className="btn btn-accent join-item">
-          Add todo
-        </button>
+        <SubmitBtn />
       </div>
     </form>
   );

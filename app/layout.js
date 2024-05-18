@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Providers from "./providers";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="py-20 mx-auto">{children}</main>
+        <main className="py-20 mx-auto">
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );
